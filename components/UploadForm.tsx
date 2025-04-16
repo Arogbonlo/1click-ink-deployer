@@ -2,16 +2,25 @@ import React, { useState } from 'react';
 import JSZip from 'jszip';
 import { parseContractMetadata } from '../lib/parseContract';
 
-export default function UploadForm({ onParsed }) {
+type UploadFormProps = {
+  onParsed: (metadata: unknown) => void;
+};
+
+export default function UploadForm({ onParsed }: UploadFormProps) {
   const [error, setError] = useState('');
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    try {
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-    const zip = await JSZip.loadAsync(file);
-    const metadata = await parseContractMetadata(zip);
-    onParsed(metadata);
+      const zip = await JSZip.loadAsync(file);
+      const metadata = await parseContractMetadata(zip);
+      onParsed(metadata);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to parse the contract file.');
+    }
   };
 
   return (
