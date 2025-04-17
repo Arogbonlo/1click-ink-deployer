@@ -72,7 +72,7 @@ export default function DeployButton({
             : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-blue-500/40'
         }`}
     >
-      🚀 Deploy Contract
+      Deploy Contract
     </button>
   );
 }
