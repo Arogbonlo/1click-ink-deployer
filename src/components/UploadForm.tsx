@@ -3,7 +3,7 @@ import JSZip from 'jszip';
 import { parseContractMetadata } from '../lib/parseContract';
 
 type UploadFormProps = {
-  onParsed: (metadata: unknown) => void;
+  onParsed?: (metadata: unknown) => void; // ✅ Made optional
 };
 
 export default function UploadForm({ onParsed }: UploadFormProps) {
@@ -16,7 +16,10 @@ export default function UploadForm({ onParsed }: UploadFormProps) {
 
       const zip = await JSZip.loadAsync(file);
       const metadata = await parseContractMetadata(zip);
-      onParsed(metadata);
+
+      if (onParsed) {
+        onParsed(metadata); // ✅ Only call if provided
+      }
     } catch (err) {
       console.error(err);
       setError('Failed to parse the contract file.');
