@@ -1,55 +1,51 @@
-'use client'
+'use client';
 
-import { web3Enable, web3Accounts } from '@polkadot/extension-dapp'
-import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { web3Enable, web3Accounts } from '@polkadot/extension-dapp';
+import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 
 interface WalletConnectProps {
-  onAccount: (account: InjectedAccountWithMeta) => void
+  onAccount: (account: InjectedAccountWithMeta) => void;
 }
 
 export default function WalletConnect({ onAccount }: WalletConnectProps) {
-  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([])
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<string>(''); // start with empty
 
   useEffect(() => {
     const connect = async () => {
-      await web3Enable('1Click Ink Deployer')
-      const all = await web3Accounts()
-      setAccounts(all)
-      if (all.length > 0) {
-        setSelectedIndex(0)
-        onAccount(all[0])
-      }
+      await web3Enable('1Click Ink Deployer');
+      const all = await web3Accounts();
+      setAccounts(all);
+    };
+    connect();
+  }, []);
+
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const index = parseInt(e.target.value);
+    if (!isNaN(index)) {
+      setSelectedIndex(e.target.value);
+      onAccount(accounts[index]);
     }
-
-    connect()
-  }, [onAccount])
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const index = parseInt(e.target.value)
-    setSelectedIndex(index)
-    onAccount(accounts[index])
-  }
+  };
 
   return (
-    <div className="mb-4">
-      <label className="block mb-1 font-medium text-sm">Select Wallet:</label>
-      {accounts.length > 0 ? (
-        <select
-          value={selectedIndex}
-          onChange={handleChange}
-          className="border px-3 py-2 rounded w-full text-black"
-        >
-          {accounts.map((acc, i) => (
-            <option key={acc.address} value={i}>
-              {acc.meta.name || `Account ${i + 1}`} – {acc.address.slice(0, 10)}...
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p className="text-sm text-red-500">⚠ No wallet accounts found.</p>
-      )}
+    <div className="w-full">
+      <label className="block mb-2 text-sm font-medium text-white">Wallet:</label>
+      <select
+        value={selectedIndex}
+        onChange={handleSelect}
+        className="w-full border px-3 py-2 rounded bg-white text-black"
+      >
+        <option value="" disabled>
+          Please select wallet
+        </option>
+        {accounts.map((acc, index) => (
+          <option key={acc.address} value={index}>
+            {acc.meta.name || `Account ${index + 1}`} – {acc.address.slice(0, 10)}...
+          </option>
+        ))}
+      </select>
     </div>
-  )
+  );
 }
