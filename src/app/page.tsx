@@ -23,7 +23,7 @@ export default function HomePage() {
   const [isDeploying, setIsDeploying] = useState(false);
 
   return (
-    <main className="p-6 text-white space-y-6">
+    <main className="min-h-screen px-4 py-6 sm:px-8 lg:px-16 xl:px-32 max-w-screen-xl mx-auto text-white space-y-10">
       <h1 className="text-3xl font-bold">Welcome to 1Click Ink Deployer</h1>
       <p></p>
 

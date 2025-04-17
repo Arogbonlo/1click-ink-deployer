@@ -19,12 +19,14 @@ export default function ConstructorInput({ constructor, onChange }: ConstructorI
               {arg.type.displayName?.join(' ') || arg.type.type}
             </span>
           </label>
+          <div className="w-full">
           <input
             type="text"
             onChange={(e) => onChange(index, e.target.value)}
             placeholder={`Enter ${arg.label}`}
             className="w-full px-3 py-2 text-black rounded border"
           />
+          </div>
         </div>
       ))}
     </div>

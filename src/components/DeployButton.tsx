@@ -61,15 +61,5 @@ export default function DeployButton({
   const isDisabled =
     !wasmCode || !metadata || !constructorName || !sender || args.includes('')
 
-  return (
-    <button
-      onClick={handleDeploy}
-      disabled={isDisabled}
-      className={`mt-4 px-6 py-3 rounded text-white ${
-        isDisabled ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-      }`}
-    >
-      Deploy Contract
-    </button>
-  )
+
 }
