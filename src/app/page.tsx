@@ -1,7 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import UploadForm from '@/components/UploadForm';
-import WalletConnect from '@/components/WalletConnect';
+
+const WalletConnect = dynamic(() => import('@/components/WalletConnect'), {
+  ssr: false, // ✅ disables server-side rendering for this component
+});
 
 export default function HomePage() {
   return (
