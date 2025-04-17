@@ -11,15 +11,23 @@ export default function WalletConnect({ onAccount }: WalletConnectProps) {
 
   useEffect(() => {
     const connect = async () => {
-      await web3Enable('1-Click ink Deployer');
+      console.log('Connecting...');
+      const extensions = await web3Enable('1-Click ink Deployer');
+      console.log('Extensions found:', extensions);
+  
       const all = await web3Accounts();
+      console.log('Accounts found:', all);
+  
       setAccounts(all);
+  
       if (all.length > 0 && onAccount) {
-        onAccount(all[0]); // ✅ Only call if onAccount is provided
+        onAccount(all[0]);
       }
     };
+  
     connect();
   }, [onAccount]);
+  
 
   return (
     <div>
