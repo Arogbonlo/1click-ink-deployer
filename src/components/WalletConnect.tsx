@@ -1,31 +1,47 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { web3Enable, web3Accounts } from '@polkadot/extension-dapp';
+import { web3Enable, web3Accounts, web3FromSource } from '@polkadot/extension-dapp';
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import type { Signer } from '@polkadot/api/types';
 
 interface WalletConnectProps {
-  onAccount: (account: InjectedAccountWithMeta) => void;
+  onAccount: (account: {
+    address: string;
+    signer: Signer;
+  }) => void;
 }
 
 export default function WalletConnect({ onAccount }: WalletConnectProps) {
   const [accounts, setAccounts] = useState<InjectedAccountWithMeta[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<string>(''); // start with empty
+  const [selectedIndex, setSelectedIndex] = useState<string>('');
 
   useEffect(() => {
     const connect = async () => {
-      await web3Enable('1Click Ink Deployer');
+      const extensions = await web3Enable('1Click Ink Deployer');
+      if (!extensions.length) {
+        alert('⚠️ Please install or enable the Polkadot.js extension.');
+        return;
+      }
+
       const all = await web3Accounts();
       setAccounts(all);
     };
+
     connect();
   }, []);
 
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelect = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const index = parseInt(e.target.value);
     if (!isNaN(index)) {
       setSelectedIndex(e.target.value);
-      onAccount(accounts[index]);
+      const selected = accounts[index];
+      const injector = await web3FromSource(selected.meta.source);
+
+      onAccount({
+        address: selected.address,
+        signer: injector.signer,
+      });
     }
   };
 

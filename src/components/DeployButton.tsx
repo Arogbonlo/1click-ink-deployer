@@ -2,13 +2,17 @@
 
 import { deployContract } from '@/lib/deployContract';
 import { CHAINS } from '@/constants/chains';
+import type { Signer } from '@polkadot/types/types';
 
 interface DeployButtonProps {
   wasmCode: Uint8Array | null;
-  metadata: any;
+  metadata: Record<string, unknown>;
   constructorName: string;
   args: string[];
-  sender: any;
+  sender: {
+    address: string;
+    signer: Signer;
+  };
   rpcUrl: string;
   onStatus: (msg: string) => void;
   setIsDeploying: (val: boolean) => void;
@@ -39,20 +43,22 @@ export default function DeployButton({
         metadata,
         constructorName,
         constructorArgs: args,
-        senderAccount: sender,
+        senderAddress: sender.address,
+        signer: sender.signer,
         rpcUrl,
       });
 
-      const txHash = result.toString();
+      const { blockHash } = result;
       const chain = CHAINS.find((c) => c.rpcUrl === rpcUrl);
       const explorerLink = chain?.explorer
-        ? `${chain.explorer}${txHash}`
-        : txHash;
+        ? `${chain.explorer}${blockHash}`
+        : blockHash;
 
       onStatus(`✅ Deployed! View Tx: ${explorerLink}`);
-    } catch (err: any) {
-      console.error(err);
-      onStatus(`❌ Error: ${err.message || 'Unknown error'}`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error);
+      onStatus(`❌ Error: ${error.message || 'Unknown error'}`);
     } finally {
       setIsDeploying(false);
     }

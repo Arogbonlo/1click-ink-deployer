@@ -6,18 +6,31 @@ import UploadForm from '@/components/UploadForm';
 import { CHAINS } from '@/constants/chains';
 import DeployButton from '@/components/DeployButton';
 import ConstructorInput from '@/components/ConstructorInput';
+import type { Constructor as ContractConstructor } from '@/types/constructor';
+import type { Signer } from '@polkadot/api/types';
 
 const WalletConnect = dynamic(() => import('@/components/WalletConnect'), {
   ssr: false,
 });
 
+type Chain = {
+  name: string;
+  rpcUrl: string;
+  explorer: string;
+};
+
+type Account = {
+  address: string;
+  signer: Signer;
+};
+
 export default function HomePage() {
-  const [selectedChain, setSelectedChain] = useState<any>(null);
+  const [selectedChain, setSelectedChain] = useState<Chain | null>(null);
   const [wasmCode, setWasmCode] = useState<Uint8Array | null>(null);
-  const [metadata, setMetadata] = useState<any>(null);
-  const [account, setAccount] = useState<any>(null);
+  const [metadata, setMetadata] = useState<Record<string, unknown> | null>(null);
+  const [account, setAccount] = useState<Account | null>(null);
   const [constructorName, setConstructorName] = useState<string | null>(null);
-  const [selectedConstructor, setSelectedConstructor] = useState<any>(null);
+  const [selectedConstructor, setSelectedConstructor] = useState<ContractConstructor | null>(null);
   const [args, setArgs] = useState<string[]>([]);
   const [txStatus, setTxStatus] = useState('');
   const [isDeploying, setIsDeploying] = useState(false);
@@ -42,13 +55,27 @@ export default function HomePage() {
         <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Upload Form</h2>
           <UploadForm
-            onParsed={(meta: any, wasm: Uint8Array) => {
-              setMetadata(meta);
-              setWasmCode(wasm);
-              const constructor = meta?.V3?.spec?.constructors?.[0];
-              setConstructorName(constructor?.label ?? null);
-              setSelectedConstructor(constructor);
-              setArgs(Array(constructor?.args?.length).fill(''));
+            onParsed={(meta, wasm) => {
+              try {
+                setMetadata(meta as Record<string, unknown>);
+                setWasmCode(wasm);
+                const constructor = (meta as Record<string, any>)?.V3?.spec?.constructors?.[0];
+                if (constructor) {
+                  setConstructorName(constructor.label ?? null);
+                  setSelectedConstructor(constructor);
+                  setArgs(Array(constructor?.args?.length || 0).fill(''));
+                } else {
+                  setConstructorName(null);
+                  setSelectedConstructor(null);
+                  setArgs([]);
+                }
+              } catch (err) {
+                console.error('❌ Error parsing metadata:', err);
+                setMetadata(null);
+                setConstructorName(null);
+                setSelectedConstructor(null);
+                setArgs([]);
+              }
             }}
           />
         </div>
@@ -58,7 +85,7 @@ export default function HomePage() {
           <h2 className="text-xl font-semibold mb-4">Select Network</h2>
           <select
             value={selectedChain?.name || ''}
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const chain = CHAINS.find((c) => c.name === e.target.value);
               if (chain) setSelectedChain(chain);
             }}
@@ -96,16 +123,19 @@ export default function HomePage() {
 
         {/* Deploy Section */}
         <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
-          <DeployButton
-            wasmCode={wasmCode}
-            metadata={metadata}
-            constructorName={constructorName || ''}
-            args={args}
-            sender={account}
-            rpcUrl={selectedChain?.rpcUrl || ''}
-            onStatus={setTxStatus}
-            setIsDeploying={setIsDeploying}
-          />
+          {account && (
+            <DeployButton
+              wasmCode={wasmCode}
+              metadata={metadata || {}}
+              constructorName={constructorName || ''}
+              args={args}
+              sender={account}
+              rpcUrl={selectedChain?.rpcUrl || ''}
+              onStatus={setTxStatus}
+              setIsDeploying={setIsDeploying}
+            />
+          )}
+
           {(
             !wasmCode ||
             !metadata ||
@@ -124,12 +154,16 @@ export default function HomePage() {
             <p className="text-sm mt-2 text-green-400">
               {txStatus.includes('http') ? (
                 <a
-                  href={txStatus.split(' ').pop()}
+                  href={
+                    txStatus
+                      .split(' ')
+                      .find((s) => s.startsWith('http')) ?? '#'
+                  }
                   target="_blank"
                   className="underline"
                   rel="noopener noreferrer"
                 >
-                  {txStatus}
+                  View Transaction
                 </a>
               ) : (
                 txStatus

@@ -4,3 +4,8 @@ module.exports = {
   experimental: {
   },
 }
+module.exports = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+}

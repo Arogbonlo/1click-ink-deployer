@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 
-test('user uploads a contract and deploys', async ({ page }) => {
+import type { Page } from '@playwright/test';
+
+test('user uploads a contract and deploys', async ({ page }: { page: Page }) => {
   await page.goto('http://localhost:3000')
 
   await page.getByText('Upload Form')

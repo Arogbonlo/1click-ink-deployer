@@ -10,4 +10,3 @@ export const CHAINS = [
       explorer: 'https://alephzero.subscan.io/extrinsic/'
     }
   ]
-  import { CHAINS } from '../constants/chains'

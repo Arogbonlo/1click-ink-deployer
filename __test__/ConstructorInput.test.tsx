@@ -1,10 +1,12 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react'
 import ConstructorInput from '@/components/ConstructorInput'
 
 const mockConstructor = {
+  label: 'new',
   args: [
     { label: 'recipient', type: { type: 'AccountId', displayName: ['AccountId'] } },
-    { label: 'amount', type: { type: 'u32', displayName: ['u32'] } }
+    { label: 'amount', type: { type: 'Balance', displayName: ['Balance'] } }
   ]
 }
 
@@ -18,6 +20,5 @@ test('renders input fields for constructor args', () => {
   fireEvent.change(screen.getByPlaceholderText('Enter recipient'), {
     target: { value: '5F3sa2TJ...mocked' }
   })
-  at async t.<anonymous> (/home/bestnyah/1click-ink-deployer/node_modules/playwright-core/lib/cli/program.js:122:7)
   expect(mockOnChange).toHaveBeenCalledWith(0, '5F3sa2TJ...mocked')
 })
