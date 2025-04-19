@@ -36,7 +36,7 @@ export default function HomePage() {
   const [isDeploying, setIsDeploying] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#e6007a] text-white">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-polkadot">1Click Ink Deployer</h1>

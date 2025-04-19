@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-polkadot text-white">{children}</body>
+      <body className="bg-[#e6007a] text-white">{children}</body>
     </html>
   );
 }
