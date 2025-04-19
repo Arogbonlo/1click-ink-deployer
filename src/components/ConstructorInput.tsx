@@ -11,24 +11,24 @@ export default function ConstructorInput({ constructor, onChange }: ConstructorI
   const args = constructor?.args || [];
 
   return (
-    <div className="space-y-4 mt-4">
-      <h3 className="text-lg font-semibold">Constructor Arguments</h3>
+    <div className="space-y-6 mt-6">
+      <h3 className="text-lg font-semibold text-polkadot">Constructor Arguments</h3>
+
       {args.map((arg, index) => (
         <div key={index}>
-          <label className="block text-sm mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             {arg.label}:{' '}
-            <span className="text-gray-400">
+            <span className="text-polkadot-light font-normal">
               {arg.type.displayName?.join(' ') || arg.type.type}
             </span>
           </label>
-          <div className="w-full">
-            <input
-              type="text"
-              onChange={(e) => onChange(index, e.target.value)}
-              placeholder={`Enter ${arg.label}`}
-              className="w-full px-3 py-2 text-black rounded border"
-            />
-          </div>
+
+          <input
+            type="text"
+            onChange={(e) => onChange(index, e.target.value)}
+            placeholder={`Enter ${arg.label}`}
+            className="w-full px-4 py-2 bg-white text-black rounded-md border border-polkadot focus:outline-none focus:ring-2 focus:ring-polkadot-light transition"
+          />
         </div>
       ))}
     </div>

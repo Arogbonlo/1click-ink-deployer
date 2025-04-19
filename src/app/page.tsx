@@ -36,24 +36,24 @@ export default function HomePage() {
   const [isDeploying, setIsDeploying] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
+    <div className="min-h-screen bg-black text-white">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold">Welcome to 1Click Ink Deployer</h1>
-          <p className="mt-2 text-sm text-gray-300">
-            Easily deploy your ink! contracts to Substrate chains
+          <h1 className="text-4xl font-bold text-polkadot">1Click Ink Deployer</h1>
+          <p className="mt-2 text-sm text-polkadot-light">
+            Deploy your ink! contracts to Substrate chains — no hassle.
           </p>
         </div>
 
         {/* Wallet Connect */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">Wallet Connect</h2>
+        <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold text-polkadot mb-4">Connect Your Wallet</h2>
           <WalletConnect onAccount={setAccount} />
-        </div>
+        </section>
 
         {/* Upload Form */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">Upload Form</h2>
+        <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold text-polkadot mb-4">Upload Contract</h2>
           <UploadForm
             onParsed={(meta, wasm) => {
               try {
@@ -78,18 +78,18 @@ export default function HomePage() {
               }
             }}
           />
-        </div>
+        </section>
 
         {/* Select Network */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">Select Network</h2>
+        <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold text-polkadot mb-4">Select Network</h2>
           <select
             value={selectedChain?.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(e) => {
               const chain = CHAINS.find((c) => c.name === e.target.value);
               if (chain) setSelectedChain(chain);
             }}
-            className="w-full border px-3 py-2 rounded bg-white text-black"
+            className="w-full border border-polkadot-light px-3 py-2 rounded bg-white text-black focus:ring-2 focus:ring-polkadot"
           >
             <option value="" disabled>
               Please select network
@@ -101,15 +101,15 @@ export default function HomePage() {
             ))}
           </select>
           {selectedChain && (
-            <p className="text-sm text-gray-300 mt-2">
-              Selected RPC: <code>{selectedChain.rpcUrl}</code>
+            <p className="text-sm text-polkadot-light mt-2">
+              RPC: <code className="text-white">{selectedChain.rpcUrl}</code>
             </p>
           )}
-        </div>
+        </section>
 
         {/* Constructor Input */}
         {selectedConstructor && (
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
+          <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
             <ConstructorInput
               constructor={selectedConstructor}
               onChange={(index, value) => {
@@ -118,11 +118,11 @@ export default function HomePage() {
                 setArgs(updated);
               }}
             />
-          </div>
+          </section>
         )}
 
         {/* Deploy Section */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-lg shadow-sm">
+        <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
           {account && (
             <DeployButton
               wasmCode={wasmCode}
@@ -149,7 +149,9 @@ export default function HomePage() {
               and fill all constructor inputs to enable the deploy button.
             </p>
           )}
-          {isDeploying && <p className="text-sm text-blue-400">Deploying...</p>}
+
+          {isDeploying && <p className="text-sm text-polkadot-light">Deploying...</p>}
+
           {txStatus && (
             <p className="text-sm mt-2 text-green-400">
               {txStatus.includes('http') ? (
@@ -160,7 +162,7 @@ export default function HomePage() {
                       .find((s) => s.startsWith('http')) ?? '#'
                   }
                   target="_blank"
-                  className="underline"
+                  className="underline text-polkadot-light"
                   rel="noopener noreferrer"
                 >
                   View Transaction
@@ -170,7 +172,7 @@ export default function HomePage() {
               )}
             </p>
           )}
-        </div>
+        </section>
       </main>
     </div>
   );
