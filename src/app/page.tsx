@@ -40,11 +40,13 @@ export default function HomePage() {
     className="min-h-screen bg-black text-white" >
 
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-10">
-        <div className="text-center">
+        <div className="flex items-center gap-4">
+          <img src="/polka.jpg"alt="Polkadot"className="w-16 h-16 object-contain filter brightness-125"/>
+          <div>
           <h1 className="text-4xl font-bold text-polkadot">1Click Ink Deployer</h1>
-          <p className="mt-2 text-sm text-polkadot-light">
-            Deploy your ink! contracts to Substrate chains — no hassle.
-          </p>
+          <p className="mt-1 text-sm text-polkadot-light">
+            Deploy your ink! contracts to Substrate chains — no hassle.</p>
+          </div>
         </div>
 
         {/* Wallet Connect */}
