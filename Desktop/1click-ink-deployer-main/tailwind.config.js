@@ -1,16 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{js,ts,jsx,tsx}", // 👈 this covers everything in src
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],  
   theme: {
     extend: {
       colors: {
         polkadot: {
-          DEFAULT: '#e6007a',     // main Polkadot pink
-          light: '#ff4da6',       // lighter variant
-          dark: '#b8005f',        // deeper shade
-          softer: '#ffd6eb',      // for backgrounds and subtle accents
+          DEFAULT: '#e6007a',     
+          light: '#ff4da6',       
+          dark: '#b8005f',        
+          softer: '#ffd6eb',      
         },
       },
     },
