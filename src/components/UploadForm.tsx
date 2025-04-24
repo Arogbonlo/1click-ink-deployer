@@ -21,14 +21,13 @@ export default function UploadForm({ onParsed }: UploadFormProps) {
       // Parse metadata
       const metadata = await parseContractMetadata(zip);
 
-      // Extract .wasm file (assuming it's named correctly in the .contract file)
       const wasmFile = Object.keys(zip.files).find((name) => name.endsWith('.wasm'));
       if (!wasmFile) throw new Error('WASM file not found in contract archive');
 
       const wasmContent = await zip.files[wasmFile].async('uint8array');
 
       if (onParsed) {
-        onParsed(metadata, wasmContent); // ✅ Now passes both
+        onParsed(metadata, wasmContent);
       }
     } catch (err) {
       console.error(err);
@@ -38,8 +37,7 @@ export default function UploadForm({ onParsed }: UploadFormProps) {
 
   return (
     <div className="p-4 border rounded">
-      <label className="block mb-2">Upload .contract file:</label>
-      <input type="file" accept=".contract" onChange={handleFile} />
+       <input type="file" accept=".contract" onChange={handleFile} />
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );

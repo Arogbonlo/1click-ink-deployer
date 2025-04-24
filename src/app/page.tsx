@@ -149,8 +149,7 @@ export default function HomePage() {
             args.includes('')
           ) && (
             <p className="text-sm text-white mt-2">
-              Please connect your wallet, upload a valid .contract file, select a network,
-              and fill all constructor inputs to enable the deploy button.
+              Please connect your wallet, upload a valid .contract file, and select a network, to enable the deploy button.
             </p>
           )}
 
