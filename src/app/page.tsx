@@ -36,16 +36,15 @@ export default function HomePage() {
   const [isDeploying, setIsDeploying] = useState(false);
 
   return (
-    <div
-    className="min-h-screen bg-black text-white" >
-
+    <div className="min-h-screen bg-black text-white">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-10">
         <div className="flex items-center gap-4">
-          <img src="/polka.jpg"alt="Polkadot"className="w-16 h-16 object-contain filter brightness-125"/>
+          <img src="/polka.jpg" alt="Polkadot" className="w-16 h-16 object-contain filter brightness-125" />
           <div>
-          <h1 className="text-4xl font-bold text-polkadot">1Click Ink Deployer</h1>
-          <p className="mt-1 text-sm text-polkadot-light">
-            Deploy your ink! contracts to Substrate chains — no hassle.</p>
+            <h1 className="text-4xl font-bold text-polkadot">1Click Ink Deployer</h1>
+            <p className="mt-1 text-sm text-polkadot-light">
+              Deploy your ink! contracts to Substrate chains — no hassle.
+            </p>
           </div>
         </div>
 
@@ -61,14 +60,19 @@ export default function HomePage() {
           <UploadForm
             onParsed={(meta, wasm) => {
               try {
+                console.log('📄 Received metadata:', meta);
+
                 setMetadata(meta as Record<string, unknown>);
                 setWasmCode(wasm);
-                const constructor = (meta as Record<string, any>)?.V3?.spec?.constructors?.[0];
+
+                const constructor = (meta as any)?.V3?.spec?.constructors?.[0];
+
                 if (constructor) {
                   setConstructorName(constructor.label ?? null);
                   setSelectedConstructor(constructor);
-                  setArgs(Array(constructor?.args?.length || 0).fill(''));
+                  setArgs(new Array(constructor.args?.length || 0).fill(''));
                 } else {
+                  console.warn('No constructor found or not using V3 format');
                   setConstructorName(null);
                   setSelectedConstructor(null);
                   setArgs([]);
@@ -149,7 +153,7 @@ export default function HomePage() {
             args.includes('')
           ) && (
             <p className="text-sm text-white mt-2">
-              Please connect your wallet, upload a valid .contract file, and select a network, to enable the deploy button.
+              Please connect your wallet, upload a valid .contract file, and select a network to enable the deploy button.
             </p>
           )}
 
