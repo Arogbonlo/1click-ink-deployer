@@ -29,8 +29,16 @@ export default function DeployButton({
   setIsDeploying,
 }: DeployButtonProps) {
   const handleDeploy = async () => {
-    if (!wasmCode || !metadata || !constructorName || !sender) {
-      onStatus('❌ Missing required deployment data');
+    if (
+      !wasmCode ||
+      !metadata ||
+      !constructorName ||
+      !sender?.address ||
+      !sender?.signer ||
+      !rpcUrl ||
+      args.some((arg) => arg.trim() === '')
+    ) {
+      onStatus('❌ Missing or invalid deployment data');
       return;
     }
 
@@ -65,7 +73,12 @@ export default function DeployButton({
   };
 
   const isDisabled =
-    !wasmCode || !metadata || !constructorName || !sender || args.includes('');
+    !wasmCode ||
+    !metadata ||
+    !constructorName ||
+    !sender ||
+    !rpcUrl ||
+    args.some((arg) => arg.trim() === '');
 
   return (
     <button
