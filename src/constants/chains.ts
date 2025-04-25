@@ -5,10 +5,10 @@ export const CHAINS = [
     explorer: 'https://astar.subscan.io',
   },
   {
-    name: 'Moonbeam',
-    rpcUrl: 'wss://wss.api.moonbeam.network',
-    explorer: 'https://moonbeam.subscan.io',
-  },
+    name: 'Moonbase Alpha',
+    rpcUrl: 'wss://wss.api.moonbase.moonbeam.network',
+    explorer: 'https://moonbase.subscan.io',
+  },  
   {
     name: 'Shiden',
     rpcUrl: 'wss://rpc.shiden.astar.network',
