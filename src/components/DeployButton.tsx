@@ -85,13 +85,7 @@ export default function DeployButton({
   return (
     <button
       onClick={handleDeploy}
-      disabled={isDisabled}
-      className={`w-full sm:w-auto px-6 py-3 rounded-lg font-semibold transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50
-        ${
-          isDisabled
-            ? 'bg-gray-500 cursor-not-allowed text-white'
-            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-blue-500/40'
-        }`}
+      className="w-full sm:w-auto px-6 py-3 rounded-lg font-semibold transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-blue-500/40"
     >
       Deploy Contract
     </button>
