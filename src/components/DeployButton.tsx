@@ -72,15 +72,7 @@ export default function DeployButton({
     }
   };
 
-  const isDisabled =
-    !wasmCode ||
-    !metadata ||
-    !constructorName?.trim() ||
-    !sender?.address?.trim() ||
-    !sender?.signer ||
-    !rpcUrl?.trim() ||
-    args.length === 0 ||
-    args.some((arg) => !arg || arg.trim() === '');
+  // No isDisabled needed
 
   return (
     <button
