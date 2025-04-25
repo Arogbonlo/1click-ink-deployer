@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UploadForm from '@/components/UploadForm';
 import { CHAINS } from '@/constants/chains';
 import DeployButton from '@/components/DeployButton';
@@ -35,6 +35,18 @@ export default function HomePage() {
   const [txStatus, setTxStatus] = useState('');
   const [isDeploying, setIsDeploying] = useState(false);
 
+  useEffect(() => {
+    if (metadata && !constructorName) {
+      const constructors = (metadata as any)?.spec?.constructors ?? [];
+      const firstConstructor = constructors[0];
+      if (firstConstructor) {
+        setConstructorName(firstConstructor.label ?? null);
+        setSelectedConstructor(firstConstructor);
+        setArgs(new Array(firstConstructor.args?.length || 0).fill(''));
+      }
+    }
+  }, [metadata]);
+
   return (
     <div className="min-h-screen bg-black text-white">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-10">
@@ -65,14 +77,15 @@ export default function HomePage() {
                 setMetadata(meta as Record<string, unknown>);
                 setWasmCode(wasm);
 
-                const constructor = (meta as any)?.V3?.spec?.constructors?.[0];
+                const constructors = (meta as any)?.spec?.constructors ?? [];
 
-                if (constructor) {
-                  setConstructorName(constructor.label ?? null);
-                  setSelectedConstructor(constructor);
-                  setArgs(new Array(constructor.args?.length || 0).fill(''));
+                if (constructors.length > 0) {
+                  const firstConstructor = constructors[0];
+                  setConstructorName(firstConstructor.label ?? null);
+                  setSelectedConstructor(firstConstructor);
+                  setArgs(new Array(firstConstructor.args?.length || 0).fill(''));
                 } else {
-                  console.warn('No constructor found or not using V3 format');
+                  console.warn('No constructors found in metadata');
                   setConstructorName(null);
                   setSelectedConstructor(null);
                   setArgs([]);
@@ -131,18 +144,18 @@ export default function HomePage() {
 
         {/* Deploy Section */}
         <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
-        {account && metadata && (
-          <DeployButton
-            wasmCode={wasmCode}
-            metadata={metadata}
-            constructorName={constructorName || ''}
-            args={args}
-            sender={account}
-            rpcUrl={selectedChain?.rpcUrl || ''}
-            onStatus={setTxStatus}
-            setIsDeploying={setIsDeploying}
-          />
-        )}
+          {account && metadata && (
+            <DeployButton
+              wasmCode={wasmCode}
+              metadata={metadata}
+              constructorName={constructorName || ''}
+              args={args}
+              sender={account}
+              rpcUrl={selectedChain?.rpcUrl || ''}
+              onStatus={setTxStatus}
+              setIsDeploying={setIsDeploying}
+            />
+          )}
 
           {(
             !wasmCode ||
