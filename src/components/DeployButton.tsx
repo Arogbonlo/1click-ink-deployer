@@ -29,6 +29,17 @@ export default function DeployButton({
   setIsDeploying,
 }: DeployButtonProps) {
   const handleDeploy = async () => {
+    console.log('🧪 Deployment Debug:', {
+      wasmCode: wasmCode ? '✅' : '❌',
+      metadata: metadata && Object.keys(metadata).length > 0 ? '✅' : '❌',
+      constructorName: constructorName || '❌',
+      senderAddress: sender?.address || '❌',
+      senderSigner: sender?.signer ? '✅' : '❌',
+      rpcUrl: rpcUrl || '❌',
+      args,
+      argsValid: args.every((arg) => arg.trim() !== '') ? '✅' : '❌'
+    });
+
     if (
       !wasmCode ||
       !metadata ||
