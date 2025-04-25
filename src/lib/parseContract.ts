@@ -1,9 +1,11 @@
 import JSZip from 'jszip';
 
 export async function parseContractMetadata(zip: JSZip): Promise<unknown> {
-  const metadataFile = zip.file('metadata.json');
-  if (!metadataFile) throw new Error("Missing metadata.json");
+  const contractFile = Object.values(zip.files).find((f) =>
+    f.name.endsWith('.contract')
+  );
+  if (!contractFile) throw new Error("Missing .contract file");
 
-  const metadataText = await metadataFile.async('string');
-  return JSON.parse(metadataText);
+  const contractText = await contractFile.async('string');
+  return JSON.parse(contractText);
 }
