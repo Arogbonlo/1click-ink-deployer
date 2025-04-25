@@ -131,18 +131,18 @@ export default function HomePage() {
 
         {/* Deploy Section */}
         <section className="bg-white/5 border border-polkadot/30 p-6 rounded-lg shadow-md">
-          {account && (
-            <DeployButton
-              wasmCode={wasmCode}
-              metadata={metadata}
-              constructorName={constructorName}
-              args={args}
-              sender={account}
-              rpcUrl={selectedChain?.rpcUrl || ''}
-              onStatus={setTxStatus}
-              setIsDeploying={setIsDeploying}
-            />
-          )}
+        {account && metadata && (
+          <DeployButton
+            wasmCode={wasmCode}
+            metadata={metadata}
+            constructorName={constructorName || ''}
+            args={args}
+            sender={account}
+            rpcUrl={selectedChain?.rpcUrl || ''}
+            onStatus={setTxStatus}
+            setIsDeploying={setIsDeploying}
+          />
+        )}
 
           {(
             !wasmCode ||
