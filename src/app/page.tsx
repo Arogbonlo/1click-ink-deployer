@@ -134,8 +134,8 @@ export default function HomePage() {
           {account && (
             <DeployButton
               wasmCode={wasmCode}
-              metadata={metadata || {}}
-              constructorName={constructorName || ''}
+              metadata={metadata}
+              constructorName={constructorName}
               args={args}
               sender={account}
               rpcUrl={selectedChain?.rpcUrl || ''}
@@ -147,13 +147,15 @@ export default function HomePage() {
           {(
             !wasmCode ||
             !metadata ||
-            !constructorName ||
-            !account ||
-            !selectedChain ||
-            args.includes('')
+            Object.keys(metadata).length === 0 ||
+            !constructorName?.trim() ||
+            !account?.address?.trim() ||
+            !selectedChain?.rpcUrl?.trim() ||
+            args.length === 0 ||
+            args.some((arg) => !arg || arg.trim() === '')
           ) && (
             <p className="text-sm text-white mt-2">
-              Please connect your wallet, upload a valid .contract file, and select a network to enable the deploy button.
+              Please connect your wallet, upload a valid `.contract` file, fill in constructor arguments, and select a network to enable the deploy button.
             </p>
           )}
 
